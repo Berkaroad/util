@@ -4,6 +4,7 @@ import (
 	"reflect"
 )
 
+// 类型容器
 var TypeContainer = typeContainer{mapper: make(map[string]reflect.Type, 0)}
 
 type typeContainer struct {

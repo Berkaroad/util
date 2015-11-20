@@ -4,6 +4,7 @@ import (
 	"reflect"
 )
 
+// 类型信息
 type TypeInfo struct {
 	TypeName        string
 	TypeMemberInfos []TypeMemberInfo
@@ -17,6 +18,7 @@ func (self TypeInfo) String() string {
 	return typeInfoStr
 }
 
+// 类型成员信息
 type TypeMemberInfo struct {
 	TypeMemberName     string
 	TypeMemberTypeName string
@@ -26,6 +28,7 @@ func (self TypeMemberInfo) String() string {
 	return self.TypeMemberName + " " + self.TypeMemberTypeName
 }
 
+// 获取类型的类型信息
 func GetTypeInfo(typ reflect.Type) TypeInfo {
 	realType := FromPtrType(typ)
 	switch realType.Kind() {
@@ -47,6 +50,7 @@ func GetTypeInfo(typ reflect.Type) TypeInfo {
 
 }
 
+// 获取对象的类型信息
 func GetTypeInfoOf(obj interface{}) TypeInfo {
 	realType := FromPtrTypeOf(obj)
 	return GetTypeInfo(realType)

@@ -10,6 +10,7 @@ type Initializer interface {
 }
 
 // 调用重载方法
+// 重载方法的命名规则：MethodNameParamType1_ParamType2
 func InvokeOverloadMethod(obj interface{}, methodName string, params ...interface{}) []reflect.Value {
 	if methodName == "" {
 		panic("Method name is empty!")
@@ -19,7 +20,7 @@ func InvokeOverloadMethod(obj interface{}, methodName string, params ...interfac
 	if len(params) > 0 {
 		paramVals = make([]reflect.Value, len(params))
 		for i, param := range params {
-			realMethodName = realMethodName + FromPtrTypeOf(param).Name() + "|"
+			realMethodName = realMethodName + FromPtrTypeOf(param).Name() + "_"
 			paramVals[i] = FromPtrValueOf(param)
 		}
 		realMethodName = realMethodName[:len(realMethodName)-1]
