@@ -1,6 +1,8 @@
 package util
 
 import (
+	"crypto/md5"
+	"github.com/berkaroad/uuid"
 	"reflect"
 )
 
@@ -16,6 +18,10 @@ func (self TypeInfo) String() string {
 		typeInfoStr = typeInfoStr + "|" + memberInfo.String()
 	}
 	return typeInfoStr
+}
+
+func (t TypeInfo) HashCode() uuid.UUID {
+	return uuid.UUID(md5.Sum([]byte(t.String())))
 }
 
 // 类型成员信息
