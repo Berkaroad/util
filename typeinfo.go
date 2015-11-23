@@ -4,6 +4,7 @@ import (
 	"crypto/md5"
 	"github.com/berkaroad/uuid"
 	"reflect"
+	"sort"
 )
 
 // 类型信息
@@ -39,15 +40,27 @@ func GetTypeInfo(typ reflect.Type) TypeInfo {
 	realType := FromPtrType(typ)
 	switch realType.Kind() {
 	case reflect.Struct:
+		typeMemberNameList := make([]string, realType.NumField())
 		typeMemberInfoList := make([]TypeMemberInfo, realType.NumField())
-		for i := 0; i < len(typeMemberInfoList); i++ {
-			typeMemberInfoList[i] = TypeMemberInfo{TypeMemberName: realType.Field(i).Name, TypeMemberTypeName: realType.Field(i).Type.String()}
+		for i := 0; i < len(typeMemberNameList); i++ {
+			typeMemberNameList[i] = realType.Field(i).Name
+		}
+		sort.Strings(typeMemberNameList)
+		for i, typeMemberName := range typeMemberNameList {
+			typeMember, _ := realType.FieldByName(typeMemberName)
+			typeMemberInfoList[i] = TypeMemberInfo{TypeMemberName: typeMember.Name, TypeMemberTypeName: typeMember.Type.String()}
 		}
 		return TypeInfo{TypeName: realType.Name(), TypeMemberInfos: typeMemberInfoList}
 	case reflect.Interface:
+		typeMemberNameList := make([]string, realType.NumMethod())
 		typeMemberInfoList := make([]TypeMemberInfo, realType.NumMethod())
-		for i := 0; i < len(typeMemberInfoList); i++ {
-			typeMemberInfoList[i] = TypeMemberInfo{TypeMemberName: realType.Method(i).Name, TypeMemberTypeName: realType.Method(i).Type.String()}
+		for i := 0; i < len(typeMemberNameList); i++ {
+			typeMemberNameList[i] = realType.Method(i).Name
+		}
+		sort.Strings(typeMemberNameList)
+		for i, typeMemberName := range typeMemberNameList {
+			typeMember, _ := realType.MethodByName(typeMemberName)
+			typeMemberInfoList[i] = TypeMemberInfo{TypeMemberName: typeMember.Name, TypeMemberTypeName: typeMember.Type.String()}
 		}
 		return TypeInfo{TypeName: realType.Name(), TypeMemberInfos: typeMemberInfoList}
 	default:
